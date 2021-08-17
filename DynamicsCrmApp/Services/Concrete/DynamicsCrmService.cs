@@ -126,7 +126,7 @@ namespace DynamicsCrmApp.Services.Abstract
 
             foreach (var a in result1.Entities)
             {
-                people.Add(new Person(firstName: $"{a.Attributes["name"]}", "", "", "", telephoneNumber: long.Parse($"{a.Attributes["telephone1"]}"), ""));
+                people.Add(new Person(firstName: $"{a.Attributes["name"]}", lastName: "", email: "", jobTitle: "", telephoneNumber: long.Parse($"{a.Attributes["telephone1"]}"), companyName: ""));
                 count++;
             }
 
