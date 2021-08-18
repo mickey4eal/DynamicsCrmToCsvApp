@@ -17,7 +17,7 @@ namespace DynamicsCrmApp.Services.Concrete
             Directory.CreateDirectory("C:\\CrmExport\\");
             var path = "C:\\CrmExport\\" + filename + ".csv";
 
-            var headerLine = "First Name, Last Name, Email, Job Title, Telephone Number, Company Name";
+            var headerLine = "First Name,Last Name,Email,Job Title,Telephone Number,Company Name";
 
             try
             {

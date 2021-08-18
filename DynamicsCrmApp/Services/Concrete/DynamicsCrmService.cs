@@ -27,7 +27,7 @@ namespace DynamicsCrmApp.Services.Abstract
         private readonly string uri = "https://org4be57bdb.crm11.dynamics.com/main.aspx";
         private readonly string username = "testuser1@mobkoiltd.onmicrosoft.com";
         private readonly string password = "Mobkoi@199";
-        private readonly string accountName = "account";
+        private readonly string accountName = "contact";
 
         public DynamicsCrmService()
         {
@@ -47,7 +47,7 @@ namespace DynamicsCrmApp.Services.Abstract
                         Console.WriteLine("Connection Successful!...");
 
                         var account = new Entity(accountName);//"account"
-                        account["name"] = "account";
+                        account["name"] = "contact";
 
                         Console.WriteLine("Attempting to Retrieve from Dynamics CRM....\n");
 
@@ -85,9 +85,6 @@ namespace DynamicsCrmApp.Services.Abstract
 
                 var svc = new CrmServiceClient($"Url={new Uri(uri)}; Username={username}; Password={password}; AuthType=Office365");
 
-                var account = new Entity(accountName);//"account"
-                account["name"] = "account";
-
                 organizationService = (IOrganizationService)svc.OrganizationWebProxyClient != null ?
                     (IOrganizationService)svc.OrganizationWebProxyClient :
                     (IOrganizationService)svc.OrganizationServiceProxy;
@@ -104,29 +101,20 @@ namespace DynamicsCrmApp.Services.Abstract
             var people = new List<Person>();
 
             ConditionExpression condition1 = new ConditionExpression();
-            condition1.AttributeName = "name";//firstname
-            condition1.Operator = ConditionOperator.Equal;
-            condition1.Values.Add("Jimmy Jones");
-
-            ConditionExpression condition2 = new ConditionExpression();
-            condition2.AttributeName = "telephone1";
-            condition2.Operator = ConditionOperator.BeginsWith;
-            condition2.Values.Add("44");
 
             FilterExpression filter1 = new FilterExpression();
-            filter1.Conditions.Add(condition1);
-            filter1.Conditions.Add(condition2);
 
             QueryExpression query = new QueryExpression(entity.LogicalName);
-            query.ColumnSet.AddColumns("name", "telephone1");
-            query.Criteria.AddFilter(filter1);
+            query.ColumnSet.AddColumns("firstname", "lastname", "emailaddress1", "jobtitle", "telephone1", "parentcustomerid");
 
             EntityCollection result1 = _service.RetrieveMultiple(query);
             var count = 0;
 
             foreach (var a in result1.Entities)
             {
-                people.Add(new Person(firstName: $"{a.Attributes["name"]}", lastName: "", email: "", jobTitle: "", telephoneNumber: long.Parse($"{a.Attributes["telephone1"]}"), companyName: ""));
+                var entityReference = (EntityReference) a.Attributes["parentcustomerid"];
+                var compName = entityReference.Name;
+                people.Add(new Person(firstName: $"{a.Attributes["firstname"]}", lastName: $"{a.Attributes["lastname"]}", email: $"{a.Attributes["emailaddress1"]}", jobTitle: $"{a.Attributes["jobtitle"]}", telephoneNumber: $"{a.Attributes["telephone1"]}", companyName: $"{compName}"));
                 count++;
             }
 

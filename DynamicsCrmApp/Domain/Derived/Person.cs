@@ -9,7 +9,7 @@ namespace DynamicsCrmApp.Domain.Derived
 {
     public class Person : MyEntity
     {
-        public Person(string firstName, string lastName, string email, string jobTitle, long telephoneNumber, string companyName) : base(firstName, lastName, email, telephoneNumber)
+        public Person(string firstName, string lastName, string email, string jobTitle, string telephoneNumber, string companyName) : base(firstName, lastName, email, telephoneNumber)
         {
             FirstName = firstName;
             LastName = lastName;
